@@ -44,7 +44,7 @@ Go to localhost:9870 or 50070 and check
 
 Now Compile java file:
 cd Lab
-javac -classpath HADOOP_CLASSPATH -d tutorial_classes WordCount.java
+javac -classpath $HADOOP_CLASSPATH -d tutorial_classes WordCount.java
 
 
 Put Output files in one jar file:
@@ -52,11 +52,11 @@ jar -cvf WordCount.jar -C tutorial_classes .
 
 
 Run the jar file on hadoop:
-hadoop jar WordCount.jar /WordCountTutorial/Input /WordCountTutorial/Output 
+hadoop jar WordCount.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output 
 
 
 Output the result:
-hadoop dfs -cat /WordCountTutorial/Output*
+hadoop dfs -cat /WordCountTutorial/Output/*
 
 
 
