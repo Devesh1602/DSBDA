@@ -1,0 +1,107 @@
+Go to spark folder, go in bin, then in that folder open terminal
+And type command ./spark-shell
+then write :paste at start of new code
+When your code writeup is finished then press ctrl-d to run the code
+
+
+
+
+
+
+SCALA CODE PRACTICE:
+
+
+1)Write a Scala program to check the largest number among three given integers
+
+
+var a:Int=70
+var b:Int=40
+var c:Int=100
+
+
+//condition
+if(a>b)
+{
+    if(a>c){
+          printlin("a is largest"); }
+     else{
+           printlin("c is largest"); }
+}
+else{
+   if(b>c){
+        println("b is largest");}
+    else
+       { println("c is largest"); }
+}
+
+
+
+
+2) Write a Scala Program to reverse an array of integer values
+
+
+var nums1=Array(10,45,67,23,34)
+println("Original Array: ")
+for(x<-nums1)
+{
+print(s"${x}, ")
+}
+
+
+var result=test(nums1)
+println("\nReversed Array: ")
+for(x<-result)
+{
+print(s"${x}, ")
+
+}
+
+
+def test(nums:Array[Int]):Array[Int]={
+var temp1=0
+var temp2=0
+var index_first_pos=0
+var index_last_pos=nums.length-1
+while(index_first_pos<index_last_pos)
+{
+temp1=nums(index_first_pos)
+temp2=nums(index_last_pos)
+nums(index_first_pos)=temp2
+nums(index_last_pos)=temp1
+index_first_pos+=1
+index_last_post-=1
+}
+nums
+}
+
+
+3)Write a Scala Code to merge two integer array into third array
+
+
+var IntArray1=Array(10,11,12,13,14,15)
+var IntArray2=Array(20,21,22,23,24,25)
+var IntArray3=new Array[Int](12)
+var count:Int=0
+var count1:Int=0
+while(count<12)
+{
+if(count<6)
+{
+IntArray3(count)=IntArray1(count)
+}
+else
+{
+IntArray3(count)=IntArray2(count1)
+count1+=1
+}
+count+=1
+}
+
+
+println("Elements Merged in Array: ")
+count=0
+while(count<12){
+printf("%d",IntArray3(count))
+count+=1
+}
+
