@@ -1,0 +1,135 @@
+Steps for implementing Hadoop:-
+
+
+hadoop version
+javac -version
+
+
+start-all.sh
+
+
+jps
+
+
+If any Error:
+stop-all.h
+hadoop namenode -format
+start-all.sh
+
+
+cd Desktop
+mkdir Lab
+mkdir Lab/Input
+mkdir Lab/tutorial_classes
+
+
+Add WordCount.java in Lab folder and input.txt in Input Folder
+
+
+Following command is to export hadoop classpath into bash:
+export HADOOP_CLASSPATH=$(hadoop classpath)
+echo $HADOOP_CLASSPATH
+
+
+Create directories on HDFS:
+cd Desktop
+hadoop fs -mkdir /WordCountTutorial
+hadoop fs -mkdir /WordCountTutorial/Input
+
+hadoop fs -put Lab/Input/input.txt /WordCountTutorial/Input
+
+
+Go to localhost:9870 or 50070 and check
+
+
+Now Compile java file:
+cd Lab
+javac -classpath HADOOP_CLASSPATH -d tutorial_classes WordCount.java
+
+
+Put Output files in one jar file:
+jar -cvf WordCount.jar -C tutorial_classes .
+
+
+Run the jar file on hadoop:
+hadoop jar WordCount.jar /WordCountTutorial/Input /WordCountTutorial/Output 
+
+
+Output the result:
+hadoop dfs -cat /WordCountTutorial/Output*
+
+
+
+
+
+
+
+
+
+
+
+
+HADOOP WordCount.Java Code Practice
+
+
+import java.io.IOException;
+import java.util.*;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.conf.*;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+
+
+
+public class WordCount {
+public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
+private final static IntWritable one = new IntWritable(1);
+private Text word = new Text();
+
+public void map(LongWritable key, Text value, Context context)
+throws IOException, InterruptedException {
+String line = value.toString();
+StringTokenizer tokenizer = new StringTokenizer(line);
+while (tokenizer.hasMoreTokens()) {
+word.set(tokenizer.nextToken());
+context.write(word, one);
+}
+}
+}
+
+public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+public void reduce(Text key, Iterable<IntWritable> values, Context context)
+throws IOException, InterruptedException {
+int sum = 0;
+for (IntWritable val : values) {
+sum += val.get();
+}
+context.write(key, new IntWritable(sum));
+}
+}
+
+public static void main(String[] args) throws Exception {
+Configuration conf = new Configuration();
+
+Job job = new Job(conf, "wordcount");
+
+job.setOutputKeyClass(Text.class);
+job.setOutputValueClass(IntWritable.class);
+
+job.setMapperClass(Map.class);
+job.setReducerClass(Reduce.class);
+
+job.setInputFormatClass(TextInputFormat.class);
+job.setOutputFormatClass(TextOutputFormat.class);
+
+FileInputFormat.addInputPath(job, new Path(args[0]));
+FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+job.waitForCompletion(true);
+}
+}
+
